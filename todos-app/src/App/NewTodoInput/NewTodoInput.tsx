@@ -1,6 +1,7 @@
 import React, { createRef } from "react";
-import { Todo } from "../../DataStructure";
+import { AppState, Todo } from "../../DataStructure";
 import "../../App.css";
+//import setUUID from "../../UUID";
 
 const NewTodoInput: React.FC = () => {
   const textInput: React.RefObject<HTMLInputElement> =
@@ -12,11 +13,14 @@ const NewTodoInput: React.FC = () => {
     }
     if (e.key === "Enter" && textInput.current.value.trim().length > 0) {
       const todo: Todo = {
+        // id: setUUID(),
         text: textInput.current.value.trim(),
         completed: false,
       };
 
-      console.log(todo);
+      //TODO: Add object todo to AppList
+
+      //console.log(todo);
 
       textInput.current.value = "";
     }
