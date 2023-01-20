@@ -5,8 +5,6 @@ import "./App.css";
 
 function RenderApp() {
   const keyup = (event: KeyboardEvent): void => {
-    //console.log(event);
-
     if (event.key !== "Enter") {
       return;
     }
@@ -14,7 +12,11 @@ function RenderApp() {
     event.preventDefault();
 
     if (event.key === "Enter") {
-      console.log("Test Message");
+      const inputMessage = getInput("new-input");
+      console.log(inputMessage, inputMessage.length);
+
+      //console.log(getInput("new-input"));
+      //console.log(getInput("new-input").length);
     }
   };
 
@@ -25,9 +27,20 @@ function RenderApp() {
         onKeyUp={keyup}
         className="new-todo"
         placeholder="What needs to be done?"
+        id="new-input"
       ></input>
     </header>
   );
 }
 
 export default RenderApp;
+
+function getInput(elemetnId: string): string {
+  let input = (
+    document.getElementById(elemetnId) as HTMLInputElement
+  ).value.trim();
+
+  (document.getElementById(elemetnId) as HTMLInputElement).value = "";
+
+  return input;
+}
