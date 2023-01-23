@@ -1,5 +1,5 @@
-import React, { useState, createRef, useEffect } from "react";
-import type { ITodo } from "../../../DataStructure";
+import React, { useState, createRef } from "react";
+import type { ITodo, TodoListType } from "../../../DataStructure";
 import "../../../App.css";
 
 interface Props {
@@ -11,13 +11,17 @@ interface State {
 }
 
 const TodoListItem: React.FC<Props> = ({ todo }) => {
-  // const editInput = createRef<HTMLInputElement>();
-  // const init: State = { onEdit: false };
-  // const [state, setState] = useState(init);
+  const reverseCompleted = (id: ITodo["id"]): void => {};
 
   return (
     <li className="todo-item">
       <div className="view">
+        <input
+          className="toggle"
+          type="checkbox"
+          checked={todo.completed}
+          // onChange={() => }
+        />
         <label>{todo.text}</label>
         <button className="destroy" />
       </div>
