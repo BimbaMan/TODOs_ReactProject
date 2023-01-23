@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { ITodo, TodoListType } from "../../DataStructure";
+import { ITodo, todoListType } from "../../DataStructure";
 import FilterList from "./FilterList/FilterList";
 
-const ListFooter: React.FC<TodoListType> = ({ todos }) => {
-  // const [todos, setTodos] = useState<ITodo[]>([]);
+type TodoListFooterProps = {
+  todos: ITodo[];
+};
+const ListFooter: React.FC<TodoListFooterProps> = ({ todos }) => {
   const completed: number = todos.filter(
     (todo) => todo.completed === true
   ).length;
@@ -26,8 +28,9 @@ const ListFooter: React.FC<TodoListType> = ({ todos }) => {
       </span>
 
       <FilterList />
-
-      <button className="clear-completed">Clear completed</button>
+      {completed > 0 && (
+        <button className="clear-completed">Clear completed</button>
+      )}
     </footer>
   );
 };

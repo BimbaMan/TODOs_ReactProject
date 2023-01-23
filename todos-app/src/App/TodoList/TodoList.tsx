@@ -1,12 +1,18 @@
-//import { Todo, AppState } from "../../DataStructure";
-import React, { ReactElement } from "react";
-import { ITodo, TodoListType } from "../../DataStructure";
+import React, { ReactElement, useState } from "react";
+import { ITodo } from "../../DataStructure";
 import TodoListItem from "./TodoListItem/TodoListItem";
 
-const TodoList: React.FC<TodoListType> = ({ todos }) => {
-  function toggleAllCheckbox(e: React.ChangeEvent<HTMLInputElement>): void {
-    //TODO write function
-  }
+type TodoListProps = {
+  todos: ITodo[];
+  onToggle(id: string): void;
+};
+
+const TodoList: React.FC<TodoListProps> = ({ todos, onToggle }) => {
+  const toggleAllCheckbox = (): void => {
+    todos.forEach((todo) => {
+      onToggle(todo.id);
+    });
+  };
 
   return (
     <section className="main">
@@ -18,9 +24,8 @@ const TodoList: React.FC<TodoListType> = ({ todos }) => {
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
       <ul className="todo-list">
-        {todos.map((todo: ITodo): ReactElement => {
-          //const classes = ["todo"];
-          return <TodoListItem key={todo.id} todo={todo} />;
+        {todos.map((todo) => {
+          return <TodoListItem key={todo.id} todo={todo} onToggle={onToggle} />;
         })}
       </ul>
     </section>
