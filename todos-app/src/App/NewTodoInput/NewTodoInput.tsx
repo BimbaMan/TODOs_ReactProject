@@ -1,4 +1,4 @@
-import React, { createRef, useState } from "react";
+import React, { createRef } from "react";
 import { ITodo } from "../../DataStructure";
 import "../../App.css";
 import setUUID from "../../UUID";

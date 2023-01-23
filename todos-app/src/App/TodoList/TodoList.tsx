@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React from "react";
 import { ITodo } from "../../DataStructure";
 import TodoListItem from "./TodoListItem/TodoListItem";
 

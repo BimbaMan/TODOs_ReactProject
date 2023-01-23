@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export interface ITodo {
   id: string;
   text: string;
