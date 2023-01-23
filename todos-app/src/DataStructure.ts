@@ -1,14 +1,9 @@
-export interface Todo {
-  // id: string;
+export interface ITodo {
+  id: string;
   text: string;
   completed: boolean;
 }
 
-export type TodoListType = Todo[];
-
-//export TodoListType TodoList= {};
-//I NEED A GLOBAL VARIABLE YodoList
-
-export interface AppState {
-  todoList: TodoListType;
-}
+export type TodoListType = {
+  todos: ITodo[];
+};
