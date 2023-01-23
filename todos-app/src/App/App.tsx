@@ -23,13 +23,21 @@ const App: React.FC = () => {
     );
   };
 
+  const removeHandler = (id: string) => {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  };
+
   return (
     <section className="todoapp">
       <NewTodoInput onAdd={addHandler} />
       {todos.length ? (
         <>
-          <TodoList todos={todos} onToggle={toggleHandler} />
-          <ListFooter todos={todos} />
+          <TodoList
+            todos={todos}
+            onToggle={toggleHandler}
+            onRemove={removeHandler}
+          />
+          <ListFooter todos={todos} onRemove={removeHandler} />
         </>
       ) : null}
     </section>

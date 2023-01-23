@@ -5,13 +5,18 @@ import "../../../App.css";
 type TodoListItemsProps = {
   todo: ITodo;
   onToggle(id: string): void;
+  onRemove(id: string): void;
 };
 
 interface State {
   onEdit: boolean;
 }
 
-const TodoListItem: React.FC<TodoListItemsProps> = ({ todo, onToggle }) => {
+const TodoListItem: React.FC<TodoListItemsProps> = ({
+  todo,
+  onToggle,
+  onRemove,
+}) => {
   const init: State = { onEdit: false };
   const [state, setState] = useState(init);
 
@@ -41,7 +46,7 @@ const TodoListItem: React.FC<TodoListItemsProps> = ({ todo, onToggle }) => {
           onChange={onToggle.bind(null, todo.id)}
         />
         <label>{todo.text}</label>
-        <button className="destroy" />
+        <button className="destroy" onClick={() => onRemove(todo.id)} />
       </div>
     </li>
   );
