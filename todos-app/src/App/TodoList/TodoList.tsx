@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ITodo } from "../../DataStructure";
 import TodoListItem from "./TodoListItem/TodoListItem";
 
@@ -9,9 +9,11 @@ type TodoListProps = {
 };
 
 const TodoList: React.FC<TodoListProps> = ({ todos, onToggle, onRemove }) => {
-  const toggleAllCheckbox = (): void => {
+  const toggleAllCheckboxes = (): void => {
     todos.forEach((todo) => {
-      onToggle(todo.id);
+      if (todo.completed === false) {
+        onToggle(todo.id);
+      }
     });
   };
 
@@ -21,7 +23,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos, onToggle, onRemove }) => {
         id="toggle-all"
         className="toggle-all"
         type="checkbox"
-        onChange={toggleAllCheckbox}
+        onChange={toggleAllCheckboxes}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
       <ul className="todo-list">

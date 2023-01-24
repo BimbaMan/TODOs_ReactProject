@@ -5,8 +5,14 @@ import FilterList from "./FilterList/FilterList";
 type TodoListFooterProps = {
   todos: ITodo[];
   onRemove(id: string): void;
+  filterTodosHandler(filterValue: string): void;
 };
-const ListFooter: React.FC<TodoListFooterProps> = ({ todos, onRemove }) => {
+
+const ListFooter: React.FC<TodoListFooterProps> = ({
+  todos,
+  onRemove,
+  filterTodosHandler,
+}) => {
   const completed: number = todos.filter(
     (todo) => todo.completed === true
   ).length;
@@ -36,7 +42,7 @@ const ListFooter: React.FC<TodoListFooterProps> = ({ todos, onRemove }) => {
         )}
       </span>
 
-      <FilterList />
+      <FilterList filterTodosHandler={filterTodosHandler} />
       {completed > 0 && (
         <button className="clear-completed" onClick={clearCompleted}>
           Clear completed

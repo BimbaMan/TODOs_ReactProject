@@ -7,9 +7,36 @@ import "../App.css";
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
+  const [filters, setFilters] = useState<ITodo[]>([]);
+
+  const filterTodosHandler = (filterValue: string) => {
+    setFilters(todos);
+    switch (filterValue) {
+      case "All": {
+        setFilters(todos);
+        break;
+      }
+      case "Active": {
+        filter(false);
+        break;
+      }
+      case "Completed": {
+        filter(true);
+        break;
+      }
+
+      default:
+        break;
+    }
+  };
+
+  function filter(state: boolean): void {
+    setFilters((prev) => prev.filter((todo) => todo.completed === state));
+  }
 
   const addHandler = (input: ITodo) => {
     setTodos((prev) => [...prev, input]);
+    setFilters((prev) => [...prev, input]);
   };
 
   const toggleHandler = (id: string) => {
@@ -21,10 +48,15 @@ const App: React.FC = () => {
         return todo;
       })
     );
+    setFilters(todos);
   };
 
   const removeHandler = (id: string) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    //setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    setFilters(todos); //asyc methods need to work one by one
+    console.log(todos);
+    console.log(filters);
   };
 
   return (
@@ -33,11 +65,15 @@ const App: React.FC = () => {
       {todos.length ? (
         <>
           <TodoList
-            todos={todos}
+            todos={filters}
             onToggle={toggleHandler}
             onRemove={removeHandler}
           />
-          <ListFooter todos={todos} onRemove={removeHandler} />
+          <ListFooter
+            todos={filters}
+            onRemove={removeHandler}
+            filterTodosHandler={filterTodosHandler}
+          />
         </>
       ) : null}
     </section>
