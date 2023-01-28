@@ -1,45 +1,49 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import NewTodoInput from "./NewTodoInput/NewTodoInput";
 import TodoList from "./TodoList/TodoList";
 import ListFooter from "./ListFooter/ListFooter";
-import { ITodo } from "../DataStructure";
+import { Todo } from "./models/Todos";
+import { FilterType } from "./models/Filters";
 import "../App.css";
 
-const App: React.FC = () => {
-  const [todos, setTodos] = useState<ITodo[]>([]);
-  const [filters, setFilters] = useState<ITodo[]>([]);
+const App = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filterTodos, setFilterTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<FilterType>("All");
 
-  const filterTodosHandler = (filterValue: string) => {
-    setFilters(todos);
-    switch (filterValue) {
+  useEffect(() => {
+    setFilterTodos(todos);
+    switch (filter) {
       case "All": {
-        setFilters(todos);
         break;
       }
       case "Active": {
-        filter(false);
+        setFilterTodos((prev) =>
+          prev.filter((todo) => todo.completed === false)
+        );
         break;
       }
       case "Completed": {
-        filter(true);
+        setFilterTodos((prev) =>
+          prev.filter((todo) => todo.completed === true)
+        );
         break;
       }
 
       default:
         break;
     }
+  }, [todos, filter]);
+
+  const filterTodosHandler = (filterValue: FilterType) => {
+    setFilter(filterValue);
   };
 
-  function filter(state: boolean): void {
-    setFilters((prev) => prev.filter((todo) => todo.completed === state));
-  }
-
-  const addHandler = (input: ITodo) => {
+  const addHandler = (input: Todo) => {
     setTodos((prev) => [...prev, input]);
-    setFilters((prev) => [...prev, input]);
   };
 
-  const toggleHandler = (id: string) => {
+  const toggleTodoHandler = (id: string) => {
     setTodos((prev) =>
       prev.map((todo) => {
         if (todo.id === id) {
@@ -48,15 +52,10 @@ const App: React.FC = () => {
         return todo;
       })
     );
-    setFilters(todos);
   };
 
-  const removeHandler = (id: string) => {
+  const removeTodoHandler = (id: string) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
-    //setTodos((prev) => prev.filter((todo) => todo.id !== id));
-    setFilters(todos); //asyc methods need to work one by one
-    console.log(todos);
-    console.log(filters);
   };
 
   return (
@@ -65,13 +64,13 @@ const App: React.FC = () => {
       {todos.length ? (
         <>
           <TodoList
-            todos={filters}
-            onToggle={toggleHandler}
-            onRemove={removeHandler}
+            todos={filterTodos}
+            onToggle={toggleTodoHandler}
+            onRemove={removeTodoHandler}
           />
           <ListFooter
-            todos={filters}
-            onRemove={removeHandler}
+            todos={filterTodos}
+            onRemove={removeTodoHandler}
             filterTodosHandler={filterTodosHandler}
           />
         </>

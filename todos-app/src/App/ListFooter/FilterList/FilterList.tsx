@@ -1,12 +1,12 @@
-import React from "react";
+import { FilterType } from "../../models/Filters";
 import "../../../App.css";
 
-type FilterListProps = {
+type Props = {
   filterTodosHandler(filterValue: string): void;
 };
 
-const FilterList: React.FC<FilterListProps> = ({ filterTodosHandler }) => {
-  const setClassName = (flag: string): void => {
+const FilterList = ({ filterTodosHandler }: Props) => {
+  const setClassName = (flag: FilterType): void => {
     const selectedAll = document.querySelectorAll("li > a");
     for (let element of selectedAll) {
       if (element.textContent === flag) {

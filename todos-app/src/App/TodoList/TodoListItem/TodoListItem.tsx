@@ -1,43 +1,23 @@
-import React, { useState } from "react";
-import { ITodo } from "../../../DataStructure";
+import { Todo } from "../../models/Todos";
 import "../../../App.css";
 
-type TodoListItemsProps = {
-  todo: ITodo;
+type Props = {
+  todo: Todo;
   onToggle(id: string): void;
   onRemove(id: string): void;
 };
 
-interface State {
-  onEdit: boolean;
-}
-
-const TodoListItem: React.FC<TodoListItemsProps> = ({
-  todo,
-  onToggle,
-  onRemove,
-}) => {
-  const init: State = { onEdit: false };
-  const [state, setState] = useState(init);
-
-  const SwitchStyle = (t: ITodo, onEdit: boolean): string => {
-    switch (true) {
-      case onEdit && t.completed:
-        return "completed editing";
-      case onEdit && !t.completed:
-        return "editing";
-      case !onEdit && t.completed:
-        return "completed";
-      case !onEdit && !t.completed:
-        return "";
-
-      default:
-        return "";
+const TodoListItem = ({ todo, onToggle, onRemove }: Props) => {
+  const switchStyle = (t: Todo): string => {
+    if (t.completed) {
+      return "completed";
+    } else {
+      return "";
     }
   };
 
   return (
-    <li key={todo.id} className={SwitchStyle(todo, state.onEdit)}>
+    <li key={todo.id} className={switchStyle(todo)}>
       <div className="view">
         <input
           className="toggle"

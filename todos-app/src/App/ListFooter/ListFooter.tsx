@@ -1,28 +1,23 @@
-import React, { useState } from "react";
-import { ITodo, todoListType } from "../../DataStructure";
+import { Todo } from "../models/Todos";
 import FilterList from "./FilterList/FilterList";
 
-type TodoListFooterProps = {
-  todos: ITodo[];
+type Props = {
+  todos: Todo[];
   onRemove(id: string): void;
   filterTodosHandler(filterValue: string): void;
 };
 
-const ListFooter: React.FC<TodoListFooterProps> = ({
-  todos,
-  onRemove,
-  filterTodosHandler,
-}) => {
-  const completed: number = todos.filter(
+const ListFooter = ({ todos, onRemove, filterTodosHandler }: Props) => {
+  const completedCount: number = todos.filter(
     (todo) => todo.completed === true
   ).length;
-  const backlog: number = todos.filter(
+  const backlogCount: number = todos.filter(
     (todo) => todo.completed === false
   ).length;
 
   const clearCompleted = () => {
     todos.forEach((todo) => {
-      if (todo.completed === true) {
+      if (todo.completed) {
         onRemove(todo.id);
       }
     });
@@ -31,19 +26,19 @@ const ListFooter: React.FC<TodoListFooterProps> = ({
   return (
     <footer className="footer">
       <span className="todo-count">
-        {backlog === 1 ? (
+        {backlogCount === 1 ? (
           <>
-            <strong>{backlog}</strong> item left
+            <strong>{backlogCount}</strong> item left
           </>
         ) : (
           <>
-            <strong>{backlog}</strong> items left
+            <strong>{backlogCount}</strong> items left
           </>
         )}
       </span>
 
       <FilterList filterTodosHandler={filterTodosHandler} />
-      {completed > 0 && (
+      {completedCount > 0 && (
         <button className="clear-completed" onClick={clearCompleted}>
           Clear completed
         </button>
