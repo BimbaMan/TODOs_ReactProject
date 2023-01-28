@@ -3,14 +3,24 @@ import NewTodoInput from "./NewTodoInput/NewTodoInput";
 import TodoList from "./TodoList/TodoList";
 import ListFooter from "./ListFooter/ListFooter";
 import { ITodo } from "../DataStructure";
-import setUUID from "../UUID";
 import "../App.css";
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
 
   const addHandler = (input: ITodo) => {
-    setTodos((prev) => [input, ...prev]);
+    setTodos((prev) => [...prev, input]);
+  };
+
+  const toggleHandler = (id: string) => {
+    setTodos((prev) =>
+      prev.map((todo) => {
+        if (todo.id === id) {
+          todo.completed = !todo.completed;
+        }
+        return todo;
+      })
+    );
   };
 
   return (
@@ -18,7 +28,7 @@ const App: React.FC = () => {
       <NewTodoInput onAdd={addHandler} />
       {todos.length ? (
         <>
-          <TodoList todos={todos} />
+          <TodoList todos={todos} onToggle={toggleHandler} />
           <ListFooter todos={todos} />
         </>
       ) : null}

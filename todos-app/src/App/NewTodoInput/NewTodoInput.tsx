@@ -15,6 +15,7 @@ const NewTodoInput: React.FC<ITodoInputProps> = (props) => {
     if (textInput.current === null) {
       return;
     }
+    e.preventDefault();
 
     if (e.key === "Enter" && textInput.current.value.trim() === "") {
       textInput.current.value = "";
