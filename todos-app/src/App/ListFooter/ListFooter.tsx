@@ -4,14 +4,23 @@ import FilterList from "./FilterList/FilterList";
 
 type TodoListFooterProps = {
   todos: ITodo[];
+  onRemove(id: string): void;
 };
-const ListFooter: React.FC<TodoListFooterProps> = ({ todos }) => {
+const ListFooter: React.FC<TodoListFooterProps> = ({ todos, onRemove }) => {
   const completed: number = todos.filter(
     (todo) => todo.completed === true
   ).length;
   const backlog: number = todos.filter(
     (todo) => todo.completed === false
   ).length;
+
+  const clearCompleted = () => {
+    todos.forEach((todo) => {
+      if (todo.completed === true) {
+        onRemove(todo.id);
+      }
+    });
+  };
 
   return (
     <footer className="footer">
@@ -29,7 +38,9 @@ const ListFooter: React.FC<TodoListFooterProps> = ({ todos }) => {
 
       <FilterList />
       {completed > 0 && (
-        <button className="clear-completed">Clear completed</button>
+        <button className="clear-completed" onClick={clearCompleted}>
+          Clear completed
+        </button>
       )}
     </footer>
   );
