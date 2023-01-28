@@ -14,6 +14,7 @@ const TodoListItem = ({ todo, onToggle, onRemove }: Props) => {
     } else {
       return "";
     }
+    document.getElementById("toggle-all");
   };
 
   return (
@@ -23,7 +24,9 @@ const TodoListItem = ({ todo, onToggle, onRemove }: Props) => {
           className="toggle"
           type="checkbox"
           checked={todo.completed}
-          onChange={onToggle.bind(null, todo.id)}
+          onChange={() => {
+            onToggle(todo.id);
+          }}
         />
         <label>{todo.text}</label>
         <button className="destroy" onClick={() => onRemove(todo.id)} />

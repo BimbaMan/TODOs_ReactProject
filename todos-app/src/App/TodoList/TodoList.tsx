@@ -35,7 +35,8 @@ const TodoList = ({ todos, onToggle, onRemove }: Props) => {
         id="toggle-all"
         className="toggle-all"
         type="checkbox"
-        onChange={toggleAllCheckboxes}
+        checked={isChecked}
+        onChange={() => setIsChecked(!isChecked)}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
       <ul className="todo-list">
