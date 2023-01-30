@@ -10,24 +10,17 @@ type Props = {
 
 const TodoList = ({ todos, onToggle, onRemove }: Props) => {
   const [isChecked, setIsChecked] = useState(false);
+  let toggleAllState = todos.every((todo) => {
+    return todo.completed === true;
+  });
 
   useEffect(() => {
-    let state: boolean;
-    if (isChecked) {
-      state = false;
-    } else {
-      state = true;
-    }
     todos.forEach((todo) => {
-      if (todo.completed === state) {
+      if (todo.completed === toggleAllState) {
         onToggle(todo.id);
       }
     });
   }, [isChecked]);
-
-  const toggleAllCheckboxes = (): void => {
-    setIsChecked(!isChecked);
-  };
 
   return (
     <section className="main">
@@ -35,7 +28,7 @@ const TodoList = ({ todos, onToggle, onRemove }: Props) => {
         id="toggle-all"
         className="toggle-all"
         type="checkbox"
-        checked={isChecked}
+        checked={toggleAllState}
         onChange={() => setIsChecked(!isChecked)}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>

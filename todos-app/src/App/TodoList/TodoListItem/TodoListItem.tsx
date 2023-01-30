@@ -14,7 +14,6 @@ const TodoListItem = ({ todo, onToggle, onRemove }: Props) => {
     } else {
       return "";
     }
-    document.getElementById("toggle-all");
   };
 
   return (
