@@ -1,7 +1,7 @@
 import React, { createRef } from "react";
 import { Todo } from "../models/Todos";
 import "../../App.css";
-import GenerateUUID from "../uuid/UUIDGenerator";
+import generateUUID from "../uuid/UUIDGenerator";
 
 type Props = {
   onAdd(input: Todo): void;
@@ -21,7 +21,7 @@ const NewTodoInput = ({ onAdd }: Props) => {
       textInput.current.value = "";
     } else if (e.key === "Enter" && textInput.current.value.trim().length > 0) {
       const todo: Todo = {
-        id: GenerateUUID(),
+        id: generateUUID(),
         text: textInput.current.value.trim(),
         completed: false,
       };

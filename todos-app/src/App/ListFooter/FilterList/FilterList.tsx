@@ -1,50 +1,42 @@
 import { FilterType } from "../../models/Filters";
 import "../../../App.css";
+import { useState } from "react";
 
 type Props = {
   filterTodosHandler(filterValue: string): void;
 };
 
 const FilterList = ({ filterTodosHandler }: Props) => {
+  const [filter, setFilter] = useState<FilterType>("All");
+
   const setClassName = (flag: FilterType): void => {
-    const selectedAll = document.querySelectorAll("li > a");
-    for (let element of selectedAll) {
-      if (element.textContent === flag) {
-        element.className = "selected";
-      } else {
-        element.className = "";
-      }
-    }
-    switch (flag) {
-      case "All": {
-        filterTodosHandler(flag);
-        break;
-      }
-      case "Active": {
-        filterTodosHandler(flag);
-        break;
-      }
-      case "Completed": {
-        filterTodosHandler(flag);
-        break;
-      }
-    }
+    setFilter(flag);
+    filterTodosHandler(flag);
   };
 
   return (
     <ul className="filters">
       <li>
-        <a className="selected" onClick={() => setClassName("All")}>
+        <a
+          className={filter === "All" ? "selected" : ""}
+          onClick={() => setClassName("All")}
+        >
           All
         </a>
       </li>{" "}
       <li>
-        <a className="" onClick={() => setClassName("Active")}>
+        <a
+          className={filter === "Active" ? "selected" : ""}
+          onClick={() => setClassName("Active")}
+        >
           Active
         </a>
       </li>{" "}
       <li>
-        <a className="" onClick={() => setClassName("Completed")}>
+        <a
+          className={filter === "Completed" ? "selected" : ""}
+          onClick={() => setClassName("Completed")}
+        >
           Completed
         </a>
       </li>

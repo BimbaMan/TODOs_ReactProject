@@ -8,16 +8,8 @@ type Props = {
 };
 
 const TodoListItem = ({ todo, onToggle, onRemove }: Props) => {
-  const switchStyle = (t: Todo): string => {
-    if (t.completed) {
-      return "completed";
-    } else {
-      return "";
-    }
-  };
-
   return (
-    <li key={todo.id} className={switchStyle(todo)}>
+    <li key={todo.id} className={todo.completed ? "completed" : ""}>
       <div className="view">
         <input
           className="toggle"

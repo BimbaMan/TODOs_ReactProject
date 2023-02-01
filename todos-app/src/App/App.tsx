@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NewTodoInput from "./NewTodoInput/NewTodoInput";
 import TodoList from "./TodoList/TodoList";
 import ListFooter from "./ListFooter/ListFooter";
@@ -8,32 +8,14 @@ import "../App.css";
 
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterTodos, setFilterTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterType>("All");
 
-  useEffect(() => {
-    setFilterTodos(todos);
-    switch (filter) {
-      case "All": {
-        break;
-      }
-      case "Active": {
-        setFilterTodos((prev) =>
-          prev.filter((todo) => todo.completed === false)
-        );
-        break;
-      }
-      case "Completed": {
-        setFilterTodos((prev) =>
-          prev.filter((todo) => todo.completed === true)
-        );
-        break;
-      }
-
-      default:
-        break;
-    }
-  }, [todos, filter]);
+  const filteredTodos =
+    filter === "Active"
+      ? todos.filter((todo) => !todo.completed)
+      : filter === "Completed"
+      ? todos.filter((todo) => todo.completed)
+      : todos;
 
   const filterTodosHandler = (filterValue: FilterType) => {
     setFilter(filterValue);
@@ -55,7 +37,11 @@ const App = () => {
   };
 
   const removeTodoHandler = (id: string) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    setTodos((prev) =>
+      prev.filter((todo) => {
+        todo.id !== id;
+      })
+    );
   };
 
   return (
@@ -64,12 +50,12 @@ const App = () => {
       {todos.length ? (
         <>
           <TodoList
-            todos={filterTodos}
+            todos={filteredTodos}
             onToggle={toggleTodoHandler}
             onRemove={removeTodoHandler}
           />
           <ListFooter
-            todos={filterTodos}
+            todos={filteredTodos}
             onRemove={removeTodoHandler}
             filterTodosHandler={filterTodosHandler}
           />

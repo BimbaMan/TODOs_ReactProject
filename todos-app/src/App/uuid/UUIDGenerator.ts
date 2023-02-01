@@ -1,4 +1,4 @@
-function GenerateUUID(): string {
+function generateUUID(): string {
   let result = "";
   const letters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -9,4 +9,4 @@ function GenerateUUID(): string {
 
   return result;
 }
-export default GenerateUUID;
+export default generateUUID;

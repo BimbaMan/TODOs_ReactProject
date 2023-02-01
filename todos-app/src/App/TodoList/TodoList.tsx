@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Todo } from "../models/Todos";
 import TodoListItem from "./TodoListItem/TodoListItem";
 
@@ -9,18 +8,15 @@ type Props = {
 };
 
 const TodoList = ({ todos, onToggle, onRemove }: Props) => {
-  const [isChecked, setIsChecked] = useState(false);
-  let toggleAllState = todos.every((todo) => {
+  const handleToggleAll = () => {
+    todos
+      .filter((todo) => todo.completed === allCompleted)
+      .forEach((todo) => onToggle(todo.id));
+  };
+
+  const allCompleted = todos.every((todo) => {
     return todo.completed === true;
   });
-
-  useEffect(() => {
-    todos.forEach((todo) => {
-      if (todo.completed === toggleAllState) {
-        onToggle(todo.id);
-      }
-    });
-  }, [isChecked]);
 
   return (
     <section className="main">
@@ -28,8 +24,8 @@ const TodoList = ({ todos, onToggle, onRemove }: Props) => {
         id="toggle-all"
         className="toggle-all"
         type="checkbox"
-        checked={toggleAllState}
-        onChange={() => setIsChecked(!isChecked)}
+        checked={allCompleted}
+        onChange={handleToggleAll}
       />
       <label htmlFor="toggle-all">Mark all as complete</label>
       <ul className="todo-list">
