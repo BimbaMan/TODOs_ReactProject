@@ -1,18 +1,29 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import NewTodoInput from "./NewTodoInput/NewTodoInput";
 import TodoList from "./TodoList/TodoList";
 import ListFooter from "./ListFooter/ListFooter";
-import { ITodo } from "../DataStructure";
-import "../App.css";
+import { Todo } from "./models/Todos";
+import { FilterType } from "./models/Filters";
 
-const App: React.FC = () => {
-  const [todos, setTodos] = useState<ITodo[]>([]);
+const App = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<FilterType>("All");
+  const filteredTodos =
+    filter === "Active"
+      ? todos.filter((todo) => !todo.completed)
+      : filter === "Completed"
+      ? todos.filter((todo) => todo.completed)
+      : todos;
 
-  const addHandler = (input: ITodo) => {
+  const filterTodosHandler = (filterValue: FilterType) => {
+    setFilter(filterValue);
+  };
+
+  const addHandler = (input: Todo) => {
     setTodos((prev) => [...prev, input]);
   };
 
-  const toggleHandler = (id: string) => {
+  const toggleTodoHandler = (id: string) => {
     setTodos((prev) =>
       prev.map((todo) => {
         if (todo.id === id) {
@@ -23,8 +34,12 @@ const App: React.FC = () => {
     );
   };
 
-  const removeHandler = (id: string) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  const removeTodoHandler = (id: string) => {
+    setTodos((prev) =>
+      prev.filter((todo) => {
+        todo.id !== id;
+      })
+    );
   };
 
   return (
@@ -33,11 +48,15 @@ const App: React.FC = () => {
       {todos.length ? (
         <>
           <TodoList
-            todos={todos}
-            onToggle={toggleHandler}
-            onRemove={removeHandler}
+            todos={filteredTodos}
+            onToggle={toggleTodoHandler}
+            onRemove={removeTodoHandler}
           />
-          <ListFooter todos={todos} onRemove={removeHandler} />
+          <ListFooter
+            todos={filteredTodos}
+            onRemove={removeTodoHandler}
+            filterTodosHandler={filterTodosHandler}
+          />
         </>
       ) : null}
     </section>

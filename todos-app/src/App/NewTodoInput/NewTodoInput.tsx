@@ -1,13 +1,12 @@
-import React, { createRef, useState } from "react";
-import { ITodo } from "../../DataStructure";
-import "../../App.css";
-import setUUID from "../../UUID";
+import React, { createRef } from "react";
+import { Todo } from "../models/Todos";
+import generateUUID from "../uuid/UUIDGenerator";
 
-interface ITodoInputProps {
-  onAdd(input: ITodo): void;
-}
+type Props = {
+  onAdd(input: Todo): void;
+};
 
-const NewTodoInput: React.FC<ITodoInputProps> = (props) => {
+const NewTodoInput = ({ onAdd }: Props) => {
   const textInput: React.RefObject<HTMLInputElement> =
     createRef<HTMLInputElement>();
 
@@ -20,13 +19,13 @@ const NewTodoInput: React.FC<ITodoInputProps> = (props) => {
     if (e.key === "Enter" && textInput.current.value.trim() === "") {
       textInput.current.value = "";
     } else if (e.key === "Enter" && textInput.current.value.trim().length > 0) {
-      const todo: ITodo = {
-        id: setUUID(),
+      const todo: Todo = {
+        id: generateUUID(),
         text: textInput.current.value.trim(),
         completed: false,
       };
 
-      props.onAdd(todo);
+      onAdd(todo);
 
       textInput.current.value = "";
     }

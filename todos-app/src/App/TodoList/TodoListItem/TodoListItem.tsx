@@ -1,49 +1,22 @@
-import React, { useState, createRef } from "react";
-import { ITodo } from "../../../DataStructure";
-import "../../../App.css";
+import { Todo } from "../../models/Todos";
 
-type TodoListItemsProps = {
-  todo: ITodo;
+type Props = {
+  todo: Todo;
   onToggle(id: string): void;
   onRemove(id: string): void;
 };
 
-interface State {
-  onEdit: boolean;
-}
-
-const TodoListItem: React.FC<TodoListItemsProps> = ({
-  todo,
-  onToggle,
-  onRemove,
-}) => {
-  const init: State = { onEdit: false };
-  const [state, setState] = useState(init);
-
-  const SwitchStyle = (t: ITodo, onEdit: boolean): string => {
-    switch (true) {
-      case onEdit && t.completed:
-        return "completed editing";
-      case onEdit && !t.completed:
-        return "editing";
-      case !onEdit && t.completed:
-        return "completed";
-      case !onEdit && !t.completed:
-        return "";
-
-      default:
-        return "";
-    }
-  };
-
+const TodoListItem = ({ todo, onToggle, onRemove }: Props) => {
   return (
-    <li key={todo.id} className={SwitchStyle(todo, state.onEdit)}>
+    <li key={todo.id} className={todo.completed ? "completed" : ""}>
       <div className="view">
         <input
           className="toggle"
           type="checkbox"
           checked={todo.completed}
-          onChange={onToggle.bind(null, todo.id)}
+          onChange={() => {
+            onToggle(todo.id);
+          }}
         />
         <label>{todo.text}</label>
         <button className="destroy" onClick={() => onRemove(todo.id)} />
