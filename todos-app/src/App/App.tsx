@@ -6,7 +6,7 @@ import { Todo } from "./models/Todos";
 import { FilterType } from "./models/Filters";
 
 const App = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(LoadTodosFromLocalStorage);
   const [filter, setFilter] = useState<FilterType>("All");
   const filteredTodos =
     filter === "Active"
@@ -14,6 +14,19 @@ const App = () => {
       : filter === "Completed"
       ? todos.filter((todo) => todo.completed)
       : todos;
+
+  useEffect(() => {
+    window.localStorage.setItem("TODOS_STATE", JSON.stringify(todos));
+  }, [todos]);
+
+  function LoadTodosFromLocalStorage(): Todo[] {
+    const stringifiedJSON: string | null =
+      window.localStorage.getItem("TODOS_STATE");
+    if (typeof stringifiedJSON === "string") {
+      return JSON.parse(stringifiedJSON);
+    }
+    return [];
+  }
 
   const filterTodosHandler = (filterValue: FilterType) => {
     setFilter(filterValue);
@@ -35,11 +48,7 @@ const App = () => {
   };
 
   const removeTodoHandler = (id: string) => {
-    setTodos((prev) =>
-      prev.filter((todo) => {
-        todo.id !== id;
-      })
-    );
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
   return (
