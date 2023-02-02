@@ -1,6 +1,5 @@
 import React, { createRef } from "react";
 import { Todo } from "../models/Todos";
-import "../../App.css";
 import generateUUID from "../uuid/UUIDGenerator";
 
 type Props = {

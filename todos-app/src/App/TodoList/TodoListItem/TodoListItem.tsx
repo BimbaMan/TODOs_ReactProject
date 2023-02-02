@@ -1,5 +1,4 @@
 import { Todo } from "../../models/Todos";
-import "../../../App.css";
 
 type Props = {
   todo: Todo;

@@ -1,5 +1,4 @@
 import { FilterType } from "../../models/Filters";
-import "../../../App.css";
 import { useState } from "react";
 
 type Props = {
