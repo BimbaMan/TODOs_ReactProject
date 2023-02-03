@@ -8,6 +8,9 @@ import { FilterType } from "./models/Filters";
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>(LoadTodosFromLocalStorage);
   const [filter, setFilter] = useState<FilterType>("All");
+  const updateLocalStorage = () => {
+    window.localStorage.setItem("TODOS_STATE", JSON.stringify(todos));
+  };
   const filteredTodos =
     filter === "Active"
       ? todos.filter((todo) => !todo.completed)
@@ -16,7 +19,7 @@ const App = () => {
       : todos;
 
   useEffect(() => {
-    window.localStorage.setItem("TODOS_STATE", JSON.stringify(todos));
+    updateLocalStorage();
   }, [todos]);
 
   function LoadTodosFromLocalStorage(): Todo[] {
