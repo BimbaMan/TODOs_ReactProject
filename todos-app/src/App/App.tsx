@@ -2,15 +2,13 @@ import { useEffect, useState } from "react";
 import NewTodoInput from "./NewTodoInput/NewTodoInput";
 import TodoList from "./TodoList/TodoList";
 import ListFooter from "./ListFooter/ListFooter";
+import MainHeader from "./MainHeader/MainHeader";
 import { Todo } from "./models/Todos";
 import { FilterType } from "./models/Filters";
 
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>(LoadTodosFromLocalStorage);
   const [filter, setFilter] = useState<FilterType>("All");
-  const updateLocalStorage = () => {
-    window.localStorage.setItem("TODOS_STATE", JSON.stringify(todos));
-  };
   const filteredTodos =
     filter === "Active"
       ? todos.filter((todo) => !todo.completed)
@@ -21,6 +19,10 @@ const App = () => {
   useEffect(() => {
     updateLocalStorage();
   }, [todos]);
+
+  const updateLocalStorage = () => {
+    window.localStorage.setItem("TODOS_STATE", JSON.stringify(todos));
+  };
 
   function LoadTodosFromLocalStorage(): Todo[] {
     const stringifiedJSON: string | null =
@@ -55,22 +57,25 @@ const App = () => {
   };
 
   return (
-    <section className="todoapp">
-      <NewTodoInput onAdd={addHandler} />
-      {todos.length ? (
-        <>
-          <TodoList
-            todos={filteredTodos}
-            onToggle={toggleTodoHandler}
-            onRemove={removeTodoHandler}
-          />
-          <ListFooter
-            todos={filteredTodos}
-            onRemove={removeTodoHandler}
-            filterTodosHandler={filterTodosHandler}
-          />
-        </>
-      ) : null}
+    <section>
+      <MainHeader />
+      <section className="todoapp">
+        <NewTodoInput onAdd={addHandler} />
+        {todos.length ? (
+          <>
+            <TodoList
+              todos={filteredTodos}
+              onToggle={toggleTodoHandler}
+              onRemove={removeTodoHandler}
+            />
+            <ListFooter
+              todos={filteredTodos}
+              onRemove={removeTodoHandler}
+              filterTodosHandler={filterTodosHandler}
+            />
+          </>
+        ) : null}
+      </section>
     </section>
   );
 };
