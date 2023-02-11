@@ -5,6 +5,7 @@ import ListFooter from "./ListFooter/ListFooter";
 import MainHeader from "./MainHeader/MainHeader";
 import { Todo } from "./models/Todos";
 import { FilterType } from "./models/Filters";
+import Copyright from "./Copyright/Copyright";
 
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>(LoadTodosFromLocalStorage);
@@ -76,6 +77,7 @@ const App = () => {
           </>
         ) : null}
       </section>
+      <Copyright />
     </section>
   );
 };

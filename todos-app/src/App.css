@@ -388,7 +388,6 @@ html .clear-completed:active {
 	border: 1px solid transparent;
 	border-radius: 3px;
 	border-color: rgba(175, 47, 47, 0.1);
-	font-style: italic;
 	color: #a4a1a1;
 }
 .headerButton:hover {
