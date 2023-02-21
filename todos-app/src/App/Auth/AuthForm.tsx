@@ -46,7 +46,6 @@ const AuthForm = ({ updateUser, user }: Props) => {
         console.log(user); //user info log
       } catch (error) {
         console.log(error); //error info log
-        console.log("error register");
       }
     }
   };
@@ -130,9 +129,7 @@ const AuthForm = ({ updateUser, user }: Props) => {
             </div>
             <div className="field btn">
               <div className="btn-layer"></div>
-              <input defaultValue="Sign In" onClick={login} />
-              {/* <button onClick={login}> Login</button> */}
-              {/* //FIXME: why button doesn't work? */}
+              <input type="button" defaultValue="Sign In" onClick={login} />
             </div>
           </form>
           <form className="signup">
@@ -168,13 +165,7 @@ const AuthForm = ({ updateUser, user }: Props) => {
             </div>
             <div className="field btn">
               <div className="btn-layer"></div>
-              <input
-                className="register"
-                defaultValue="Sign Up"
-                onClick={register}
-              />
-              {/* <button onClick={register}>Sign Up</button>*/}
-              {/* FIXME: why button doesn't work? */}
+              <input type="button" defaultValue="Sign Up" onClick={register} />
             </div>
           </form>
         </div>
