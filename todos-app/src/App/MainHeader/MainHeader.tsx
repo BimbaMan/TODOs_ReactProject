@@ -1,21 +1,17 @@
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
-import { useEffect, useState } from "react";
 import { auth } from "../Firebase/FirebaseConfig";
+import "../css/MainHeader.css";
 
 type Props = {
-  setAuthing(): void;
   user: User | null;
   updateUser(user: User | null): void;
 };
 
-const MainHeader = ({ setAuthing, user, updateUser }: Props) => {
+const MainHeader = ({ user, updateUser }: Props) => {
   const changeAuthState = () => {
     onAuthStateChanged(auth, (currentUser) => {
       updateUser(auth.currentUser);
     });
-    if (auth.currentUser) {
-      setAuthing();
-    }
   };
 
   const logout = async () => {

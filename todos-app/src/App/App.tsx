@@ -21,8 +21,7 @@ const App = () => {
       : filter === "Completed"
       ? todos.filter((todo) => todo.completed)
       : todos;
-
-  const [authing, setAuthing] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>(auth.currentUser);
 
   useEffect(() => {
     updateLocalStorage();
@@ -89,27 +88,17 @@ const App = () => {
   // //react-router (to redirect routes)
   // //or render auth then app
 
-  const updateAuthing = () => {
-    setAuthing(!authing);
-  };
-
-  const [user, setUser] = useState<User | null>(auth.currentUser);
-
   const updateUser = (user: User | null) => {
     setUser(user);
-
-    //updateAuthing();
   };
 
   return (
     <>
-      {!authing ? (
+      {user === null ? (
+        <AuthForm updateUser={updateUser} user={user} />
+      ) : (
         <section>
-          <MainHeader
-            setAuthing={updateAuthing}
-            user={user}
-            updateUser={updateUser}
-          />
+          <MainHeader user={user} updateUser={updateUser} />
           <section className="todoapp">
             <NewTodoInput onAdd={addHandler} />
             {todos.length ? (
@@ -129,8 +118,6 @@ const App = () => {
           </section>
           <Copyright />
         </section>
-      ) : (
-        <AuthForm setAuthing={updateAuthing} updateUser={updateUser} />
       )}
     </>
   );
