@@ -32,7 +32,8 @@ const AuthForm = ({ updateUser, user }: Props) => {
     });
   };
 
-  const register = async () => {
+  const register = async (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
     if (registerPassword === registerConfirmPassword) {
       try {
         const user = await createUserWithEmailAndPassword(
@@ -50,18 +51,21 @@ const AuthForm = ({ updateUser, user }: Props) => {
     }
   };
 
-  const login = async () => {
+  const login = async (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
     try {
       const user = await signInWithEmailAndPassword(
         auth,
         loginEmail,
         loginPassword
       );
+
+      changeAuthState();
+
       console.log(user); //user info log
     } catch (error) {
       console.log(error); //error info log
     }
-    changeAuthState();
   };
 
   return (
@@ -129,7 +133,9 @@ const AuthForm = ({ updateUser, user }: Props) => {
             </div>
             <div className="field btn">
               <div className="btn-layer"></div>
-              <input type="button" defaultValue="Sign In" onClick={login} />
+              <button className="auth-button" onClick={login}>
+                Sign In
+              </button>
             </div>
           </form>
           <form className="signup">
@@ -165,7 +171,9 @@ const AuthForm = ({ updateUser, user }: Props) => {
             </div>
             <div className="field btn">
               <div className="btn-layer"></div>
-              <input type="button" defaultValue="Sign Up" onClick={register} />
+              <button className="auth-button" onClick={register}>
+                Sign Up
+              </button>
             </div>
           </form>
         </div>
