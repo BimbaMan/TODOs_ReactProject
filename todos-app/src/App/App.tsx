@@ -8,7 +8,7 @@ import { FilterType } from "./models/Filters";
 import Copyright from "./Copyright/Copyright";
 
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { auth, dataBase } from "./Firebase/FirebaseConfig";
+import { auth, database } from "./Firebase/FirebaseConfig";
 import AuthForm from "./Auth/AuthForm";
 import { User } from "firebase/auth";
 
@@ -66,6 +66,32 @@ const App = () => {
   const updateUser = (user: User | null) => {
     setUser(user);
   };
+
+  ///////////////////////////////////////////////////////////FIREBASE/////////////////////////////////////////////////////////////////////////////
+  //TODO: 1) auth always! (later add anonimus user) 2) firestore
+
+  // //create todo
+  // //read todo from firebase
+  // useEffect(() => {
+  //   const q = query(collection(dataBase, "todos"));
+  //   // const q = query(
+  //   //   collection(dataBase, "todos"),
+  //   //   where("userId", "==", userid /*from app state*/)
+  //   // );
+  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  //     let todosArr: Todo[] = [];
+  //     querySnapshot.forEach((doc) => {
+  //       todosArr.push({ ...(doc.data() as Todo), id: doc.id });
+  //     });
+  //     setTodos(todosArr);
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
+  // //update todo in firebase
+  // //delete todo
+
+  // //react-router (to redirect routes)
+  // //or render auth then app
 
   return (
     <>
