@@ -62,31 +62,6 @@ const App = () => {
   const removeTodoHandler = (id: string) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
-  ///////////////////////////////////////////////////////////FIREBASE/////////////////////////////////////////////////////////////////////////////
-  //TODO: 1) auth always! (later add anonimus user) 2) firestore
-
-  // //create todo
-  // //read todo from firebase
-  // useEffect(() => {
-  //   const q = query(collection(dataBase, "todos"));
-  //   // const q = query(
-  //   //   collection(dataBase, "todos"),
-  //   //   where("userId", "==", userid /*from app state*/)
-  //   // );
-  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //     let todosArr: Todo[] = [];
-  //     querySnapshot.forEach((doc) => {
-  //       todosArr.push({ ...(doc.data() as Todo), id: doc.id });
-  //     });
-  //     setTodos(todosArr);
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
-  // //update todo in firebase
-  // //delete todo
-
-  // //react-router (to redirect routes)
-  // //or render auth then app
 
   const updateUser = (user: User | null) => {
     setUser(user);
