@@ -6,14 +6,22 @@ import MainHeader from "./MainHeader/MainHeader";
 import { Todo } from "./models/Todos";
 import { FilterType } from "./models/Filters";
 import Copyright from "./Copyright/Copyright";
-
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { auth, database } from "./Firebase/FirebaseConfig";
 import AuthForm from "./Auth/AuthForm";
 import { User } from "firebase/auth";
 
 const App = () => {
-  const [todos, setTodos] = useState<Todo[]>(LoadTodosFromLocalStorage);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterType>("All");
   const filteredTodos =
     filter === "Active"
@@ -23,36 +31,21 @@ const App = () => {
       : todos;
   const [user, setUser] = useState<User | null>(auth.currentUser);
 
-  useEffect(() => {
-    updateLocalStorage();
-  }, [todos]);
-
-  const updateLocalStorage = () => {
-    window.localStorage.setItem("TODOS_STATE", JSON.stringify(todos));
-  };
-
-  function LoadTodosFromLocalStorage(): Todo[] {
-    const stringifiedJSON: string | null =
-      window.localStorage.getItem("TODOS_STATE");
-    if (typeof stringifiedJSON === "string") {
-      return JSON.parse(stringifiedJSON);
-    }
-    return [];
-  }
-
   const filterTodosHandler = (filterValue: FilterType) => {
     setFilter(filterValue);
   };
 
   const addHandler = (input: Todo) => {
     setTodos((prev) => [...prev, input]);
+    addTodoFirebase(input);
   };
 
   const toggleTodoHandler = (id: string) => {
     setTodos((prev) =>
       prev.map((todo) => {
         if (todo.id === id) {
-          todo.completed = !todo.completed;
+          //todo.completed = !todo.completed;
+          toggleTodoFirestore(todo);
         }
         return todo;
       })
@@ -61,42 +54,61 @@ const App = () => {
 
   const removeTodoHandler = (id: string) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    removeTodoFirebase(id);
   };
 
   const updateUser = (user: User | null) => {
     setUser(user);
   };
 
-  ///////////////////////////////////////////////////////////FIREBASE/////////////////////////////////////////////////////////////////////////////
-  //TODO: 1) auth always! (later add anonimus user) 2) firestore
+  //create todo in firebase
+  const addTodoFirebase = async (input: Todo) => {
+    await addDoc(collection(database, "todos"), {
+      text: input.text,
+      completed: input.completed,
+      userId: user?.uid,
+    });
+  };
+  //read todo from firebase
+  useEffect(() => {
+    try {
+      const q = query(
+        collection(database, "todos"),
+        where("userId", "==", user?.uid)
+      );
 
-  // //create todo
-  // //read todo from firebase
-  // useEffect(() => {
-  //   const q = query(collection(dataBase, "todos"));
-  //   // const q = query(
-  //   //   collection(dataBase, "todos"),
-  //   //   where("userId", "==", userid /*from app state*/)
-  //   // );
-  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //     let todosArr: Todo[] = [];
-  //     querySnapshot.forEach((doc) => {
-  //       todosArr.push({ ...(doc.data() as Todo), id: doc.id });
-  //     });
-  //     setTodos(todosArr);
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
-  // //update todo in firebase
-  // //delete todo
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const todosArr: Todo[] = [];
+        querySnapshot.forEach((doc) => {
+          todosArr.push({ ...(doc.data() as Todo), id: doc.id });
+        });
 
-  // //react-router (to redirect routes)
-  // //or render auth then app
+        setTodos(todosArr);
+      });
+      return () => unsubscribe();
+    } catch (error) {}
+  }, [user]);
+
+  //update todo in firebase
+  const toggleTodoFirestore = async (todo: Todo) => {
+    await updateDoc(doc(database, "todos", todo.id), {
+      completed: !todo.completed,
+    });
+  };
+  //delete todo in firebase
+  const removeTodoFirebase = async (id: string) => {
+    todos.map((todo) => {
+      if (todo.id === id) {
+        deleteDoc(doc(database, "todos", todo.id));
+      }
+      return todo;
+    });
+  };
 
   return (
     <>
       {user === null ? (
-        <AuthForm updateUser={updateUser} user={user} />
+        <AuthForm updateUser={updateUser} />
       ) : (
         <section>
           <MainHeader user={user} updateUser={updateUser} />
