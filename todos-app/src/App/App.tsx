@@ -12,6 +12,7 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
+  orderBy,
   query,
   updateDoc,
   where,
@@ -64,6 +65,7 @@ const App = () => {
   //create todo in firebase
   const addTodoFirebase = async (input: Todo) => {
     await addDoc(collection(database, "todos"), {
+      date: input.date,
       text: input.text,
       completed: input.completed,
       userId: user?.uid,
@@ -74,6 +76,7 @@ const App = () => {
     try {
       const q = query(
         collection(database, "todos"),
+        orderBy("date"),
         where("userId", "==", user?.uid)
       );
 
