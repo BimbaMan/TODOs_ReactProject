@@ -42,8 +42,10 @@ const AuthForm = ({ updateUser }: Props) => {
         );
         changeAuthState();
       } catch (error) {
-        alert("Login error. Check your email and password.");
+        alert("Sign Up error. Check your email and password.");
       }
+    } else {
+      alert("Error. Passwords don't match.");
     }
   };
 
@@ -57,7 +59,7 @@ const AuthForm = ({ updateUser }: Props) => {
       );
       changeAuthState();
     } catch (error) {
-      alert("Login error. Check your email and password.");
+      alert("Sign In error. Check your email and password.");
     }
   };
 
