@@ -2,11 +2,27 @@ import { useEffect, useState } from "react";
 import NewTodoInput from "./NewTodoInput/NewTodoInput";
 import TodoList from "./TodoList/TodoList";
 import ListFooter from "./ListFooter/ListFooter";
+import MainHeader from "./MainHeader/MainHeader";
 import { Todo } from "./models/Todos";
 import { FilterType } from "./models/Filters";
+import Copyright from "./Copyright/Copyright";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { auth, database } from "./Firebase/FirebaseConfig";
+import AuthForm from "./Auth/AuthForm";
+import { User } from "firebase/auth";
 
 const App = () => {
-  const [todos, setTodos] = useState<Todo[]>(LoadTodosFromLocalStorage);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterType>("All");
   const filteredTodos =
     filter === "Active"
@@ -14,33 +30,21 @@ const App = () => {
       : filter === "Completed"
       ? todos.filter((todo) => todo.completed)
       : todos;
-
-  useEffect(() => {
-    window.localStorage.setItem("TODOS_STATE", JSON.stringify(todos));
-  }, [todos]);
-
-  function LoadTodosFromLocalStorage(): Todo[] {
-    const stringifiedJSON: string | null =
-      window.localStorage.getItem("TODOS_STATE");
-    if (typeof stringifiedJSON === "string") {
-      return JSON.parse(stringifiedJSON);
-    }
-    return [];
-  }
+  const [user, setUser] = useState<User | null>(auth.currentUser);
 
   const filterTodosHandler = (filterValue: FilterType) => {
     setFilter(filterValue);
   };
 
   const addHandler = (input: Todo) => {
-    setTodos((prev) => [...prev, input]);
+    addTodoFirebase(input);
   };
 
   const toggleTodoHandler = (id: string) => {
     setTodos((prev) =>
       prev.map((todo) => {
         if (todo.id === id) {
-          todo.completed = !todo.completed;
+          toggleTodoFirestore(todo);
         }
         return todo;
       })
@@ -49,26 +53,87 @@ const App = () => {
 
   const removeTodoHandler = (id: string) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    removeTodoFirebase(id);
+  };
+
+  const updateUser = (user: User | null) => {
+    setUser(user);
+  };
+
+  //create todo in firebase
+  const addTodoFirebase = async (input: Todo) => {
+    await addDoc(collection(database, "todos"), {
+      date: input.date,
+      text: input.text,
+      completed: input.completed,
+      userId: user?.uid,
+    });
+  };
+  //read todo from firebase
+  useEffect(() => {
+    try {
+      const q = query(
+        collection(database, "todos"),
+        orderBy("date", "desc"),
+        where("userId", "==", user?.uid)
+      );
+
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const todosArr: Todo[] = [];
+        querySnapshot.forEach((doc) => {
+          todosArr.push({ ...(doc.data() as Todo), id: doc.id });
+        });
+
+        setTodos(todosArr);
+      });
+      return () => unsubscribe();
+    } catch (error) {}
+  }, [user]);
+
+  //update todo in firebase
+  const toggleTodoFirestore = async (todo: Todo) => {
+    await updateDoc(doc(database, "todos", todo.id), {
+      completed: !todo.completed,
+    });
+  };
+  //delete todo in firebase
+  const removeTodoFirebase = async (id: string) => {
+    todos.map((todo) => {
+      if (todo.id === id) {
+        deleteDoc(doc(database, "todos", todo.id));
+      }
+      return todo;
+    });
   };
 
   return (
-    <section className="todoapp">
-      <NewTodoInput onAdd={addHandler} />
-      {todos.length ? (
-        <>
-          <TodoList
-            todos={filteredTodos}
-            onToggle={toggleTodoHandler}
-            onRemove={removeTodoHandler}
-          />
-          <ListFooter
-            todos={filteredTodos}
-            onRemove={removeTodoHandler}
-            filterTodosHandler={filterTodosHandler}
-          />
-        </>
-      ) : null}
-    </section>
+    <>
+      {user === null ? (
+        <AuthForm updateUser={updateUser} />
+      ) : (
+        <section>
+          <MainHeader user={user} />
+          <section className="todoapp">
+            <NewTodoInput onAdd={addHandler} />
+            {todos.length ? (
+              <>
+                <TodoList
+                  todos={filteredTodos}
+                  onToggle={toggleTodoHandler}
+                  onRemove={removeTodoHandler}
+                />
+                <ListFooter
+                  todos={filteredTodos}
+                  onRemove={removeTodoHandler}
+                  filterTodosHandler={filterTodosHandler}
+                />
+              </>
+            ) : null}
+          </section>
+          <Copyright />
+        </section>
+      )}
+    </>
   );
 };
 
