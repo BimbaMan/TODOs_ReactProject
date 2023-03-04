@@ -10,10 +10,9 @@ import "../css/Auth.css";
 
 type Props = {
   updateUser(user: User | null): void;
-  user: User | null;
 };
 
-const AuthForm = ({ updateUser, user }: Props) => {
+const AuthForm = ({ updateUser }: Props) => {
   const [registerEmail, setRegisterEmail] = useState<string>("");
   const [registerPassword, setRegisterPassword] = useState<string>("");
   const [registerConfirmPassword, setRegisterConfirmPassword] =
@@ -41,13 +40,11 @@ const AuthForm = ({ updateUser, user }: Props) => {
           registerEmail,
           registerPassword
         );
-
-        changeAuthState();
-
-        console.log(user); //user info log
       } catch (error) {
-        console.log(error); //error info log
+        alert("Sign Up error. Check your email and password.");
       }
+    } else {
+      alert("Error. Passwords don't match.");
     }
   };
 
@@ -59,12 +56,8 @@ const AuthForm = ({ updateUser, user }: Props) => {
         loginEmail,
         loginPassword
       );
-
-      changeAuthState();
-
-      console.log(user); //user info log
     } catch (error) {
-      console.log(error); //error info log
+      alert("Sign In error. Check your email and password.");
     }
   };
 

@@ -1,20 +1,22 @@
  .main-header {
-    text-align: center;
-    font-size: 20px;
-    padding: 10px 15px;
-} 
+     text-align: center;
+     font-size: 20px;
+     padding: 10px 15px;
+ }
 
-.headerButton {
-	margin-top: 10px;
-	margin-bottom: -10px;
-	margin-inline: 20px;
-	padding: 5px 7px;
-	border: 1px solid transparent;
-	border-radius: 3px;
-	border-color: rgba(175, 47, 47, 0.1);
-	color: #a4a1a1;
-}
-.headerButton:hover {
-	color: #4d4d4d;
-	border-color: rgba(175, 47, 47, 0.2);
-} 
+ .headerButton {
+     margin-top: 10px;
+     margin-bottom: -10px;
+     margin-inline: 20px;
+     padding: 5px 7px;
+     border: 1px solid transparent;
+     border-radius: 3px;
+     border-color: rgba(175, 47, 47, 0.1);
+     color: #a4a1a1;
+ }
+
+ .headerButton:hover {
+     color: #4d4d4d;
+     border-color: rgba(175, 47, 47, 0.2);
+ }
+ 
