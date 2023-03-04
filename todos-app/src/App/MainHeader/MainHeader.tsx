@@ -4,11 +4,19 @@ import "../css/MainHeader.css";
 
 type Props = {
   user: User | null;
+  updateUser(user: User | null): void;
 };
 
-const MainHeader = ({ user }: Props) => {
+const MainHeader = ({ user, updateUser }: Props) => {
+  const changeAuthState = () => {
+    onAuthStateChanged(auth, (currentUser) => {
+      updateUser(auth.currentUser);
+    });
+  };
+
   const logout = async () => {
     await signOut(auth);
+    changeAuthState();
   };
 
   return (

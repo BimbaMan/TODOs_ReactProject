@@ -1,7 +1,6 @@
 import React, { createRef } from "react";
 import { Todo } from "../models/Todos";
-import { v4 as uuidv4 } from "uuid";
-import { Timestamp } from "firebase/firestore";
+import generateUUID from "../uuid/UUIDGenerator";
 
 type Props = {
   onAdd(input: Todo): void;
@@ -21,8 +20,7 @@ const NewTodoInput = ({ onAdd }: Props) => {
       textInput.current.value = "";
     } else if (e.key === "Enter" && textInput.current.value.trim().length > 0) {
       const todo: Todo = {
-        date: Timestamp.now(),
-        id: uuidv4(),
+        id: generateUUID(),
         text: textInput.current.value.trim(),
         completed: false,
       };
