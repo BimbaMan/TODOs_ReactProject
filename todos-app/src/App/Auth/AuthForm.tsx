@@ -40,7 +40,6 @@ const AuthForm = ({ updateUser }: Props) => {
           registerEmail,
           registerPassword
         );
-        changeAuthState();
       } catch (error) {
         alert("Sign Up error. Check your email and password.");
       }
@@ -57,7 +56,6 @@ const AuthForm = ({ updateUser }: Props) => {
         loginEmail,
         loginPassword
       );
-      changeAuthState();
     } catch (error) {
       alert("Sign In error. Check your email and password.");
     }

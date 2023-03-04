@@ -37,7 +37,6 @@ const App = () => {
   };
 
   const addHandler = (input: Todo) => {
-    setTodos((prev) => [...prev, input]);
     addTodoFirebase(input);
   };
 
@@ -45,7 +44,6 @@ const App = () => {
     setTodos((prev) =>
       prev.map((todo) => {
         if (todo.id === id) {
-          //todo.completed = !todo.completed;
           toggleTodoFirestore(todo);
         }
         return todo;
@@ -76,7 +74,7 @@ const App = () => {
     try {
       const q = query(
         collection(database, "todos"),
-        orderBy("date"),
+        orderBy("date", "desc"),
         where("userId", "==", user?.uid)
       );
 
@@ -114,7 +112,7 @@ const App = () => {
         <AuthForm updateUser={updateUser} />
       ) : (
         <section>
-          <MainHeader user={user} updateUser={updateUser} />
+          <MainHeader user={user} />
           <section className="todoapp">
             <NewTodoInput onAdd={addHandler} />
             {todos.length ? (
